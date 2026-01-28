@@ -94,8 +94,9 @@ const Banner = ({ type }) => {
 	const dispatch = useDispatch();
 
 	/**
-	 * Handles the play button click animation.
+	 * Handles the play button click event.
 	 * Stops event propagation to prevent parent elements from handling the click.
+	 * This ensures the Link navigation works correctly without triggering other click handlers.
 	 * 
 	 * @param {Event} event - The click event object
 	 */
@@ -105,8 +106,9 @@ const Banner = ({ type }) => {
 
 	/**
 	 * Opens the modal with detailed information about the selected content.
-	 * Dispatches the showModalDetail action with the content data and fallback title.
-	 * This allows users to view more information before deciding to watch.
+	 * Dispatches the showModalDetail action with the content data merged with the fallback title.
+	 * This creates a complete content object with all necessary properties including a guaranteed title.
+	 * Allows users to view more information before deciding to watch the content.
 	 */
 	const handleModalOpening = () => {
 		dispatch(showModalDetail({ ...finalData, fallbackTitle }));
