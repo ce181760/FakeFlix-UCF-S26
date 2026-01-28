@@ -1,3 +1,16 @@
+/**
+ * Data configuration for movies, series, and popular content
+ * Defines arrays of configuration objects that map:
+ * - Redux thunks for fetching data
+ * - API URLs from requests.js
+ * - Display titles and genre identifiers
+ * - Redux selectors for accessing state
+ * - Display preferences (isLarge for larger poster display)
+ * 
+ * Also includes the genresList mapping TMDB genre IDs to genre names
+ * Used throughout the app to configure content rows and category pages
+ */
+
 import requests from "./requests";
 import * as movieSelectors from "./redux/movies/movies.selectors";
 import * as seriesSelectors from "./redux/series/series.selectors";
@@ -49,6 +62,10 @@ const {
 	fetchTrendingSeries,
 } = requests;
 
+/**
+ * Configuration array for movie content rows
+ * Each object defines a content row for the movies page
+ */
 export const fetchMovieDataConfig = [
 	{
 		id: 0,
