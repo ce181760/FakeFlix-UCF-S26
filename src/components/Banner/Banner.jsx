@@ -1,3 +1,22 @@
+/**
+ * Banner Component
+ * 
+ * Displays a large hero banner at the top of pages featuring a randomly selected
+ * movie or TV show with its backdrop image, title, description, and action buttons.
+ * 
+ * Features:
+ * - Randomly selects content from the appropriate category (movies/series/netflix)
+ * - Shows loading skeleton during data fetch
+ * - Displays Play and More Info buttons
+ * - Uses Framer Motion for smooth animations
+ * - Truncates long descriptions to 150 characters
+ * - Responsive design with gradient overlays
+ * 
+ * @component
+ * @param {Object} props - Component props
+ * @param {string} props.type - Type of content to display ("movies", "series", or default for netflix originals)
+ * @returns {JSX.Element} Banner component with featured content
+ */
 import "./banner.scss";
 import React from "react";
 import { motion } from "framer-motion";
@@ -14,6 +33,12 @@ import { selectTrendingMovies, selectNetflixMovies } from "../../redux/movies/mo
 import { selectNetflixSeries } from "../../redux/series/series.selectors";
 
 const Banner = ({ type }) => {
+	/**
+	 * Select the appropriate Redux selector based on content type
+	 * - "movies": Shows trending movies
+	 * - "series": Shows Netflix original series
+	 * - default: Shows Netflix original movies
+	 */
 	let selector;
 	switch (type) {
 		case "movies":
@@ -27,17 +52,38 @@ const Banner = ({ type }) => {
 			break;
 	}
 
+	// Get data from Redux store using the selected selector
 	const myData = useSelector(selector);
+	
+	// Destructure loading state, error state, and results data
 	const { loading, error, data: results } = myData;
+	
+	// Select a random item from the results array to feature in the banner
 	const finalData = results[randomize(results)];
+	
+	// Get title with fallback options (movie title, series name, or original name)
 	const fallbackTitle = finalData?.title || finalData?.name || finalData?.original_name;
+	
+	// Truncate description to 150 characters for better UI presentation
 	const description = truncate(finalData?.overview, 150);
+	
+	// Get dispatch function to trigger Redux actions
 	const dispatch = useDispatch();
 
+	/**
+	 * Prevents event propagation when Play button is clicked
+	 * This allows navigation to play page without triggering parent handlers
+	 * 
+	 * @param {Event} event - Click event object
+	 */
 	const handlePlayAnimation = event => {
 		event.stopPropagation();
 	};
 
+	/**
+	 * Opens the detail modal with the featured content information
+	 * Dispatches Redux action to show modal with full item details
+	 */
 	const handleModalOpening = () => {
 		dispatch(showModalDetail({ ...finalData, fallbackTitle }));
 	}
