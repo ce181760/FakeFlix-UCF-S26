@@ -27,5 +27,6 @@
     "react": {
       "version": "detect"
     }
-  }
+  },
+  "ignorePatterns": ["*.ts", "*.tsx"]
 }

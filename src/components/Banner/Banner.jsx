@@ -42,22 +42,15 @@ import { selectTrendingMovies, selectNetflixMovies } from "../../redux/movies/mo
 import { selectNetflixSeries } from "../../redux/series/series.selectors";
 
 /**
- * Props for the Banner component
- */
-interface BannerProps {
-    /** Type of content to display ('movies', 'series', or undefined for default) */
-    type?: "movies" | "series";
-}
-
-/**
  * Banner Component
  * 
- * @param {BannerProps} props - Component props
+ * @param {Object} props - Component props
+ * @param {string} [props.type] - Type of content to display ('movies', 'series', or undefined for default)
  * @returns {JSX.Element} The rendered Banner component
  */
-const Banner: React.FC<BannerProps> = ({ type }) => {
-    // Determine which Redux selector to use based on the type prop
-    // This allows the banner to display different content categories
+const Banner = ({ type }) => {
+	// Determine which Redux selector to use based on the type prop
+	// This allows the banner to display different content categories
     let selector;
     switch (type) {
         case "movies":
@@ -91,42 +84,42 @@ const Banner: React.FC<BannerProps> = ({ type }) => {
     // Redux dispatch for triggering actions
     const dispatch = useDispatch();
 
-    /**
-     * Handles the play button click event
-     * Prevents event propagation to avoid triggering parent element handlers
-     * 
-     * @param {React.MouseEvent<HTMLAnchorElement>} event - The click event object
-     */
-    const handlePlayAnimation = (event: React.MouseEvent<HTMLAnchorElement>): void => {
-        event.stopPropagation();
-    };
+	/**
+	 * Handles the play button click event
+	 * Prevents event propagation to avoid triggering parent element handlers
+	 * 
+	 * @param {Event} event - The click event object
+	 */
+	const handlePlayAnimation = (event) => {
+		event.stopPropagation();
+	};
 
-    /**
-     * Opens the detail modal for the current banner content
-     * Dispatches a Redux action with the content data and fallback title
-     */
-    const handleModalOpening = (): void => {
-        dispatch(showModalDetail({ ...finalData, fallbackTitle }));
-    }
+	/**
+	 * Opens the detail modal for the current banner content
+	 * Dispatches a Redux action with the content data and fallback title
+	 */
+	const handleModalOpening = () => {
+		dispatch(showModalDetail({ ...finalData, fallbackTitle }));
+	}
 
     return (
         <> 
             {/* Loading/Error Section - Displays while data is being fetched or if an error occurs */}
-            <motion.section
-                variants={bannerFadeInLoadSectionVariants}
-                initial='initial'
-                animate='animate'
-                exit='exit'
-                className="Banner__loadsection"
-            >
-                {/* Show skeleton loader during data fetch */}
-                {loading && <SkeletonBanner />}
-                {/* Show error message if data fetch fails */}
-                {error && <div className="errored">Oops, an error occurred.</div>}
-            </motion.section>
+			<motion.div
+				variants={bannerFadeInLoadSectionVariants}
+				initial='initial'
+				animate='animate'
+				exit='exit'
+				className="Banner__loadsection"
+			>
+				{/* Show skeleton loader during data fetch */}
+				{loading && <SkeletonBanner />}
+				{/* Show error message if data fetch fails */}
+				{error && <div className="errored">Oops, an error occurred.</div>}
+			</motion.div>
 
-            {/* Main Banner Content - Only renders when data is loaded and available */}
-            {!loading && finalData && (
+			{/* Main Banner Content - Only renders when data is loaded and available */}
+			{!loading && finalData && (
                 <motion.header
                     variants={bannerFadeInVariants}
                     initial='initial'
@@ -175,12 +168,12 @@ const Banner: React.FC<BannerProps> = ({ type }) => {
                     </motion.div>
                     {/* Semi-transparent overlay panel for better text readability */}
                     <div className="Banner__panel" />
-                    {/* Bottom shadow gradient for smooth transition to content below */}
-                    <div className="Banner__bottom-shadow" />
-                </motion.header>
-            )}
-        </> 
-    );
+					{/* Bottom shadow gradient for smooth transition to content below */}
+					<div className="Banner__bottom-shadow" />
+				</motion.header>
+			)}
+		</> 
+	);
 }
 
 // Export with React.memo for performance optimization
